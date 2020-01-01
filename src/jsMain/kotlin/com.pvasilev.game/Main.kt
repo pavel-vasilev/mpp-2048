@@ -7,7 +7,7 @@ import kotlin.browser.document
 fun main() {
     render(document.getElementById("root")) {
         board {
-            size = 3
+            size = 4
         }
     }
 }
