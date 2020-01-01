@@ -4,26 +4,27 @@ import react.RBuilder
 import react.RComponent
 import react.RProps
 import react.RState
-import react.dom.table
-import react.dom.tbody
-import react.dom.td
-import react.dom.tr
+import react.dom.div
 
 class Board(props: Props) : RComponent<Board.Props, Board.State>(props) {
 
     override fun State.init(props: Props) {
         values = Array(props.size) {
-            IntArray(props.size)
+            Array<Int?>(props.size) {
+                null
+            }
         }
     }
 
     override fun RBuilder.render() {
-        table {
-            tbody {
-                for (y in 0 until props.size) {
-                    tr {
-                        for (x in 0 until props.size) {
-                            td {}
+        div(classes = "grid-container") {
+            for (y in 0 until props.size) {
+                div(classes = "grid-row") {
+                    for (x in 0 until props.size) {
+                        div(classes = "grid-cell") {
+                            tile {
+                                number = state.values[y][x]
+                            }
                         }
                     }
                 }
@@ -36,7 +37,7 @@ class Board(props: Props) : RComponent<Board.Props, Board.State>(props) {
     }
 
     interface State : RState {
-        var values: Array<IntArray>
+        var values: Array<Array<Int?>>
     }
 }
 
