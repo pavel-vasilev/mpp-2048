@@ -1,12 +1,24 @@
 package com.pvasilev.game.components
 
+import org.w3c.dom.events.Event
+import org.w3c.dom.events.EventListener
+import org.w3c.dom.events.KeyboardEvent
 import react.RBuilder
 import react.RComponent
 import react.RProps
 import react.RState
 import react.dom.div
+import kotlin.browser.document
 
-class Board(props: Props) : RComponent<Board.Props, Board.State>(props) {
+class Board(props: Props) : RComponent<Board.Props, Board.State>(props), EventListener {
+
+    private companion object {
+        const val KEYCODE_UP = 38
+        const val KEYCODE_DOWN = 40
+        const val KEYCODE_LEFT = 37
+        const val KEYCODE_RIGHT = 39
+        const val KEYDOWN_EVENT = "keydown"
+    }
 
     override fun State.init(props: Props) {
         values = Array(props.size) {
@@ -14,6 +26,14 @@ class Board(props: Props) : RComponent<Board.Props, Board.State>(props) {
                 null
             }
         }
+    }
+
+    override fun componentWillMount() {
+        document.addEventListener(KEYDOWN_EVENT, this)
+    }
+
+    override fun componentWillUnmount() {
+        document.removeEventListener(KEYDOWN_EVENT, this)
     }
 
     override fun RBuilder.render() {
@@ -28,6 +48,17 @@ class Board(props: Props) : RComponent<Board.Props, Board.State>(props) {
                         }
                     }
                 }
+            }
+        }
+    }
+
+    override fun handleEvent(event: Event) {
+        if (event is KeyboardEvent) {
+            when (event.keyCode) {
+                KEYCODE_UP -> console.log("up")
+                KEYCODE_DOWN -> console.log("down")
+                KEYCODE_LEFT -> console.log("left")
+                KEYCODE_RIGHT -> console.log("right")
             }
         }
     }
