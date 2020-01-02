@@ -10,7 +10,9 @@ class Tile(props: Props) : RComponent<Tile.Props, RState>(props) {
 
     override fun RBuilder.render() {
         div(classes = "tile tile-${props.number ?: 0}") {
-            +(props.number?.toString() ?: "")
+            div(classes = "tile-inner") {
+                +(props.number?.toString() ?: "")
+            }
         }
     }
 

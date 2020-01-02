@@ -1,16 +1,17 @@
 package com.pvasilev.game.components
 
+import com.pvasilev.game.State
+import com.pvasilev.game.actions.Move
 import org.w3c.dom.events.Event
 import org.w3c.dom.events.EventListener
 import org.w3c.dom.events.KeyboardEvent
-import react.RBuilder
-import react.RComponent
-import react.RProps
-import react.RState
+import react.*
 import react.dom.div
+import react.redux.rConnect
+import redux.WrapperAction
 import kotlin.browser.document
 
-class Board(props: Props) : RComponent<Board.Props, Board.State>(props), EventListener {
+class Board(props: Props) : RComponent<Board.Props, RState>(props), EventListener {
 
     private companion object {
         const val KEYCODE_UP = 38
@@ -18,14 +19,6 @@ class Board(props: Props) : RComponent<Board.Props, Board.State>(props), EventLi
         const val KEYCODE_LEFT = 37
         const val KEYCODE_RIGHT = 39
         const val KEYDOWN_EVENT = "keydown"
-    }
-
-    override fun State.init(props: Props) {
-        values = Array(props.size) {
-            Array<Int?>(props.size) {
-                null
-            }
-        }
     }
 
     override fun componentWillMount() {
@@ -43,7 +36,7 @@ class Board(props: Props) : RComponent<Board.Props, Board.State>(props), EventLi
                     for (x in 0 until props.size) {
                         div(classes = "grid-cell") {
                             tile {
-                                number = state.values[y][x]
+                                number = props.values[y][x]
                             }
                         }
                     }
@@ -53,27 +46,39 @@ class Board(props: Props) : RComponent<Board.Props, Board.State>(props), EventLi
     }
 
     override fun handleEvent(event: Event) {
+        event.preventDefault()
         if (event is KeyboardEvent) {
             when (event.keyCode) {
-                KEYCODE_UP -> console.log("up")
-                KEYCODE_DOWN -> console.log("down")
-                KEYCODE_LEFT -> console.log("left")
-                KEYCODE_RIGHT -> console.log("right")
+                KEYCODE_UP -> props.onMove(Move.Direction.UP)
+                KEYCODE_DOWN -> props.onMove(Move.Direction.DOWN)
+                KEYCODE_LEFT -> props.onMove(Move.Direction.LEFT)
+                KEYCODE_RIGHT -> props.onMove(Move.Direction.RIGHT)
             }
         }
     }
 
     interface Props : RProps {
         var size: Int
-    }
-
-    interface State : RState {
         var values: Array<Array<Int?>>
+        var onMove: (Move.Direction) -> Unit
     }
 }
 
-fun RBuilder.board(handler: Board.Props.() -> Unit) {
-    child(Board::class) {
-        attrs(handler)
-    }
+private interface BoardStateProps : RProps {
+    var size: Int
+    var values: Array<Array<Int?>>
 }
+
+private interface BoardDispatchProps : RProps {
+    var onMove: (Move.Direction) -> Unit
+}
+
+val board = rConnect<State, Move, WrapperAction, RProps, BoardStateProps, BoardDispatchProps, Board.Props>(
+    { state, _ ->
+        size = state.size
+        values = state.values
+    },
+    { dispatch, _ ->
+        onMove = { dispatch(Move(it)) }
+    }
+)(Board::class.js.unsafeCast<RClass<Board.Props>>())

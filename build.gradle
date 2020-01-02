@@ -17,6 +17,12 @@ kotlin {
     js {
         browser()
     }
+    
+    targets.js.compilations.all {
+        kotlinOptions {
+            moduleKind = "commonjs"
+        }
+    }
 
     sourceSets {
         jsMain {
@@ -24,9 +30,13 @@ kotlin {
                 implementation kotlin('stdlib-js')
                 implementation 'org.jetbrains.kotlinx:kotlinx-html-js:0.6.12'
                 implementation 'org.jetbrains:kotlin-react:16.9.0-pre.89-kotlin-1.3.60'
+                implementation 'org.jetbrains:kotlin-redux:4.0.0-pre.89-kotlin-1.3.60'
                 implementation 'org.jetbrains:kotlin-react-dom:16.9.0-pre.89-kotlin-1.3.60'
+                implementation 'org.jetbrains:kotlin-react-redux:5.0.7-pre.89-kotlin-1.3.60'
                 implementation npm('react', '16.9.0')
+                implementation npm('redux', '4.0.0')
                 implementation npm('react-dom', '16.9.0')
+                implementation npm('react-redux', '5.0.7')
             }
         }
 
