@@ -1,5 +1,6 @@
 package com.pvasilev.game.styles
 
+import com.pvasilev.game.models.Tile
 import kotlinx.css.*
 import kotlinx.css.properties.LineHeight
 import kotlinx.css.properties.ms
@@ -17,7 +18,7 @@ object TileStyles : StyleSheet("TileStyles") {
         fontWeight = FontWeight.bold
         fontFamily = "Helvetica Neue"
         textAlign = TextAlign.center
-        transition(duration = 600.ms)
+        transition(duration = 300.ms)
     }
 
     val tile2 by css {
@@ -65,4 +66,17 @@ object TileStyles : StyleSheet("TileStyles") {
         background = "#edc850"
         color = Color("#f9f6f2")
     }
+
+    fun `for`(tile: Tile): RuleSet =
+        when (tile.value) {
+            2 -> tile2
+            4 -> tile4
+            8 -> tile8
+            16 -> tile16
+            32 -> tile32
+            64 -> tile64
+            128 -> tile128
+            256 -> tile256
+            else -> tile512
+        }
 }

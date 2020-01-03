@@ -1,8 +1,13 @@
 package com.pvasilev.game.components
 
-import com.pvasilev.game.State
 import com.pvasilev.game.actions.Move
+import com.pvasilev.game.models.State
+import com.pvasilev.game.models.Tile
 import com.pvasilev.game.styles.BoardStyles
+import com.pvasilev.game.styles.TileStyles
+import kotlinx.css.left
+import kotlinx.css.px
+import kotlinx.css.top
 import org.w3c.dom.events.Event
 import org.w3c.dom.events.EventListener
 import org.w3c.dom.events.KeyboardEvent
@@ -36,6 +41,17 @@ class Board(props: Props) : RComponent<Board.Props, RState>(props), EventListene
             css {
                 +BoardStyles.container
             }
+            props.tiles.forEach { tile ->
+                styledDiv {
+                    css {
+                        +TileStyles.tile
+                        +TileStyles.`for`(tile)
+                        left = (tile.x * 100 + 8 * (tile.x + 1)).px
+                        top = (tile.y * 100 + 8 * (tile.y + 1)).px
+                    }
+                    +tile.value.toString()
+                }
+            }
             for (y in 0 until props.size) {
                 styledDiv {
                     css {
@@ -67,12 +83,14 @@ class Board(props: Props) : RComponent<Board.Props, RState>(props), EventListene
 
     interface Props : RProps {
         var size: Int
+        var tiles: List<Tile>
         var onMove: (Move.Direction) -> Unit
     }
 }
 
 private interface BoardStateProps : RProps {
     var size: Int
+    var tiles: List<Tile>
 }
 
 private interface BoardDispatchProps : RProps {
@@ -82,6 +100,7 @@ private interface BoardDispatchProps : RProps {
 val board = rConnect<State, Move, WrapperAction, RProps, BoardStateProps, BoardDispatchProps, Board.Props>(
     { state, _ ->
         size = state.size
+        tiles = state.tiles
     },
     { dispatch, _ ->
         onMove = { dispatch(Move(it)) }

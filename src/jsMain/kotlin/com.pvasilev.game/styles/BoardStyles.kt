@@ -12,6 +12,7 @@ object BoardStyles : StyleSheet("BoardStyles") {
     }
 
     val row by css {
+        height = 100.px
         marginBottom = 8.px
         lastChild {
             marginBottom = 0.px
