@@ -2,13 +2,15 @@ package com.pvasilev.game.components
 
 import com.pvasilev.game.State
 import com.pvasilev.game.actions.Move
+import com.pvasilev.game.styles.BoardStyles
 import org.w3c.dom.events.Event
 import org.w3c.dom.events.EventListener
 import org.w3c.dom.events.KeyboardEvent
 import react.*
-import react.dom.div
 import react.redux.rConnect
 import redux.WrapperAction
+import styled.css
+import styled.styledDiv
 import kotlin.browser.document
 
 class Board(props: Props) : RComponent<Board.Props, RState>(props), EventListener {
@@ -30,13 +32,19 @@ class Board(props: Props) : RComponent<Board.Props, RState>(props), EventListene
     }
 
     override fun RBuilder.render() {
-        div(classes = "grid-container") {
+        styledDiv {
+            css {
+                +BoardStyles.container
+            }
             for (y in 0 until props.size) {
-                div(classes = "grid-row") {
+                styledDiv {
+                    css {
+                        +BoardStyles.row
+                    }
                     for (x in 0 until props.size) {
-                        div(classes = "grid-cell") {
-                            tile {
-                                number = props.values[y][x]
+                        styledDiv {
+                            css {
+                                +BoardStyles.cell
                             }
                         }
                     }
@@ -59,14 +67,12 @@ class Board(props: Props) : RComponent<Board.Props, RState>(props), EventListene
 
     interface Props : RProps {
         var size: Int
-        var values: Array<Array<Int?>>
         var onMove: (Move.Direction) -> Unit
     }
 }
 
 private interface BoardStateProps : RProps {
     var size: Int
-    var values: Array<Array<Int?>>
 }
 
 private interface BoardDispatchProps : RProps {
@@ -76,7 +82,6 @@ private interface BoardDispatchProps : RProps {
 val board = rConnect<State, Move, WrapperAction, RProps, BoardStateProps, BoardDispatchProps, Board.Props>(
     { state, _ ->
         size = state.size
-        values = state.values
     },
     { dispatch, _ ->
         onMove = { dispatch(Move(it)) }
