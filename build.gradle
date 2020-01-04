@@ -41,6 +41,7 @@ kotlin {
                 implementation npm('redux', '4.0.0')
                 implementation npm('react-dom', '16.9.0')
                 implementation npm('react-redux', '5.0.7')
+                implementation npm('react-transition-group', '4.3.0')
             }
         }
 

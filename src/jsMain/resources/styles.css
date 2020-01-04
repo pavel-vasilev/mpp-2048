@@ -9,3 +9,11 @@ body {
     justify-content: center;
     align-items: center;
 }
+
+.fade-appear {
+    transform: scale(0);
+}
+
+.fade-appear-done {
+    transform: scale(1);
+}

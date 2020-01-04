@@ -1,6 +1,7 @@
 package com.pvasilev.game.components
 
 import com.pvasilev.game.actions.Move
+import com.pvasilev.game.contrib.transitions.CSSTransition
 import com.pvasilev.game.models.State
 import com.pvasilev.game.models.Tile
 import com.pvasilev.game.styles.BoardStyles
@@ -42,14 +43,22 @@ class Board(props: Props) : RComponent<Board.Props, RState>(props), EventListene
                 +BoardStyles.container
             }
             props.tiles.forEach { tile ->
-                styledDiv {
-                    css {
-                        +TileStyles.tile
-                        +TileStyles.`for`(tile)
-                        left = (tile.x * 100 + 8 * (tile.x + 1)).px
-                        top = (tile.y * 100 + 8 * (tile.y + 1)).px
+                CSSTransition {
+                    attrs {
+                        `in` = true
+                        appear = true
+                        timeout = 300
+                        classNames = "fade"
                     }
-                    +tile.value.toString()
+                    styledDiv {
+                        css {
+                            +TileStyles.tile
+                            +TileStyles.`for`(tile)
+                            left = (tile.x * 100 + 8 * (tile.x + 1)).px
+                            top = (tile.y * 100 + 8 * (tile.y + 1)).px
+                        }
+                        +tile.value.toString()
+                    }
                 }
             }
             for (y in 0 until props.size) {
