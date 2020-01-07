@@ -8,4 +8,6 @@ class Move(val direction: Direction) : RAction {
     }
 }
 
+class AddNew(val amount: Int) : RAction
+
 object Reset : RAction
