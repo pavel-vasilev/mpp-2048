@@ -14,6 +14,7 @@ import org.w3c.dom.events.EventListener
 import org.w3c.dom.events.KeyboardEvent
 import react.*
 import react.redux.rConnect
+import redux.RAction
 import redux.WrapperAction
 import styled.css
 import styled.styledDiv
@@ -57,6 +58,7 @@ class Board(props: Props) : RComponent<Board.Props, RState>(props), EventListene
                             left = (tile.x * 100 + 8 * (tile.x + 1)).px
                             top = (tile.y * 100 + 8 * (tile.y + 1)).px
                         }
+                        key = tile.id.toString()
                         +tile.value.toString()
                     }
                 }
@@ -106,7 +108,7 @@ private interface BoardDispatchProps : RProps {
     var onMove: (Move.Direction) -> Unit
 }
 
-val board = rConnect<State, Move, WrapperAction, RProps, BoardStateProps, BoardDispatchProps, Board.Props>(
+val board = rConnect<State, RAction, WrapperAction, RProps, BoardStateProps, BoardDispatchProps, Board.Props>(
     { state, _ ->
         size = state.size
         tiles = state.tiles

@@ -9,6 +9,8 @@ class Move(val direction: Direction) : RAction {
     }
 }
 
+object Merge : RAction
+
 class AddNew(val amount: Int) : RAction
 
 class ChangeStatus(val status: Status) : RAction
