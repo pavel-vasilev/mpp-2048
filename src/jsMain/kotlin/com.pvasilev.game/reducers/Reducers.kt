@@ -1,8 +1,6 @@
 package com.pvasilev.game.reducers
 
-import com.pvasilev.game.actions.AddNew
-import com.pvasilev.game.actions.Move
-import com.pvasilev.game.actions.Reset
+import com.pvasilev.game.actions.*
 import com.pvasilev.game.models.State
 import com.pvasilev.game.models.Tile
 import redux.RAction
@@ -10,6 +8,7 @@ import redux.RAction
 fun reducer(state: State, action: RAction): State {
     return when (action) {
         is Reset -> State.initialState
+        is ChangeStatus -> state.copy(status = action.status)
         is Move -> state.copy(tiles = move(state, action.direction))
         is AddNew -> state.copy(tiles = state.tiles + generate(state, action.amount))
         else -> state
