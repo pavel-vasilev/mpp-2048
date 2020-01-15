@@ -3,6 +3,9 @@ package com.pvasilev.game.components
 import com.pvasilev.game.actions.Move
 import com.pvasilev.game.contrib.transitions.CSSTransition
 import com.pvasilev.game.models.State
+import com.pvasilev.game.models.Status
+import com.pvasilev.game.models.Status.LOSE
+import com.pvasilev.game.models.Status.WIN
 import com.pvasilev.game.models.Tile
 import com.pvasilev.game.styles.BoardStyles
 import com.pvasilev.game.styles.TileStyles
@@ -63,6 +66,13 @@ class Board(props: Props) : RComponent<Board.Props, RState>(props), EventListene
                     }
                 }
             }
+
+            if (props.status in setOf(WIN, LOSE)) {
+                alert {
+                    message = if (props.status == WIN) "You win!" else "Game over!"
+                }
+            }
+
             for (y in 0 until props.size) {
                 styledDiv {
                     css {
@@ -82,6 +92,7 @@ class Board(props: Props) : RComponent<Board.Props, RState>(props), EventListene
 
     override fun handleEvent(event: Event) {
         event.preventDefault()
+        if (props.status in setOf(WIN, LOSE)) return
         if (event is KeyboardEvent) {
             when (event.keyCode) {
                 KEYCODE_UP -> props.onMove(Move.Direction.UP)
@@ -95,6 +106,7 @@ class Board(props: Props) : RComponent<Board.Props, RState>(props), EventListene
     interface Props : RProps {
         var size: Int
         var tiles: List<Tile>
+        var status: Status
         var onMove: (Move.Direction) -> Unit
     }
 }
@@ -102,6 +114,7 @@ class Board(props: Props) : RComponent<Board.Props, RState>(props), EventListene
 private interface BoardStateProps : RProps {
     var size: Int
     var tiles: List<Tile>
+    var status: Status
 }
 
 private interface BoardDispatchProps : RProps {
@@ -112,6 +125,7 @@ val board = rConnect<State, RAction, WrapperAction, RProps, BoardStateProps, Boa
     { state, _ ->
         size = state.size
         tiles = state.tiles
+        status = state.status
     },
     { dispatch, _ ->
         onMove = { dispatch(Move(it)) }
