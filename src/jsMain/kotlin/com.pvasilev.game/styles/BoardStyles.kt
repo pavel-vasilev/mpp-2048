@@ -5,7 +5,7 @@ import styled.StyleSheet
 
 object BoardStyles : StyleSheet("BoardStyles") {
     val container by css {
-        position = Position.absolute
+        position = Position.relative
         background = "#bbad9F"
         borderRadius = 6.px
         padding(8.px)

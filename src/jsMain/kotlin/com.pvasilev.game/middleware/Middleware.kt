@@ -1,9 +1,6 @@
 package com.pvasilev.game.middleware
 
-import com.pvasilev.game.actions.AddNew
-import com.pvasilev.game.actions.ChangeStatus
-import com.pvasilev.game.actions.Merge
-import com.pvasilev.game.actions.Move
+import com.pvasilev.game.actions.*
 import com.pvasilev.game.models.State
 import com.pvasilev.game.models.Status
 import com.pvasilev.game.models.Tile
@@ -22,8 +19,9 @@ fun rulesMiddleware(store: MiddlewareApi<State, RAction, WrapperAction>): ((RAct
 
                 if (action is Move && oldTiles != newTiles) {
                     window.setTimeout({
+                        next(UpdateScore)
                         next(Merge)
-                        next(AddNew(1))
+                        next(CreateTiles(amount = 1))
                     }, 300)
                 }
 

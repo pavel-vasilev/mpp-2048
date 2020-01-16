@@ -1,6 +1,7 @@
 package com.pvasilev.game.components
 
 import com.pvasilev.game.actions.Move
+import com.pvasilev.game.actions.Move.Direction
 import com.pvasilev.game.contrib.transitions.CSSTransition
 import com.pvasilev.game.models.State
 import com.pvasilev.game.models.Status
@@ -95,10 +96,10 @@ class Board(props: Props) : RComponent<Board.Props, RState>(props), EventListene
         if (props.status in setOf(WIN, LOSE)) return
         if (event is KeyboardEvent) {
             when (event.keyCode) {
-                KEYCODE_UP -> props.onMove(Move.Direction.UP)
-                KEYCODE_DOWN -> props.onMove(Move.Direction.DOWN)
-                KEYCODE_LEFT -> props.onMove(Move.Direction.LEFT)
-                KEYCODE_RIGHT -> props.onMove(Move.Direction.RIGHT)
+                KEYCODE_UP -> props.onMove(Direction.UP)
+                KEYCODE_DOWN -> props.onMove(Direction.DOWN)
+                KEYCODE_LEFT -> props.onMove(Direction.LEFT)
+                KEYCODE_RIGHT -> props.onMove(Direction.RIGHT)
             }
         }
     }
@@ -107,7 +108,7 @@ class Board(props: Props) : RComponent<Board.Props, RState>(props), EventListene
         var size: Int
         var tiles: List<Tile>
         var status: Status
-        var onMove: (Move.Direction) -> Unit
+        var onMove: (Direction) -> Unit
     }
 }
 
@@ -118,7 +119,7 @@ private interface BoardStateProps : RProps {
 }
 
 private interface BoardDispatchProps : RProps {
-    var onMove: (Move.Direction) -> Unit
+    var onMove: (Direction) -> Unit
 }
 
 val board = rConnect<State, RAction, WrapperAction, RProps, BoardStateProps, BoardDispatchProps, Board.Props>(

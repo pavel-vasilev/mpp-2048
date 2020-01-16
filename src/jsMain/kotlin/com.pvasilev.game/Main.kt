@@ -1,6 +1,6 @@
 package com.pvasilev.game
 
-import com.pvasilev.game.actions.AddNew
+import com.pvasilev.game.actions.CreateTiles
 import com.pvasilev.game.components.board
 import com.pvasilev.game.middleware.rulesMiddleware
 import com.pvasilev.game.models.State
@@ -15,7 +15,7 @@ import kotlin.browser.document
 
 fun main() {
     val store = createStore(::reducer, State.initialState, compose(applyMiddleware(::rulesMiddleware), rEnhancer()))
-    store.dispatch(AddNew(2))
+    store.dispatch(CreateTiles(amount = 2))
     render(document.getElementById("root")) {
         provider(store) {
             board {}
